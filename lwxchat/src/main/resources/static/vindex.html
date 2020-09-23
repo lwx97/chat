@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <div style="background-color: red;">头</div>
+        </el-header>
+        <el-container>
+            <el-aside>
+                <div style="background-color: #ffbf00; height: 400px;">
+                    <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+                        <p v-for="h in count" class="infinite-list-item" v-html="h"></p>
+                    </ul>
+                </div>
+            </el-aside>
+            <el-container>
+                <el-header>
+                    <div style="background-color: #37ff00;">聊天ID</div>
+                </el-header>
+                <el-main>
+                    <div style="background-color: #47efb5;">
+                        <ul class="infinite-list" style="overflow:auto">
+                            <div v-for="msg in msgList" :class="msg.name== '张4'? '':'test'">
+                                <p>{{msg.name}}/{{msg.date}}/{{msg.address}}</p>
+                                <p>xxxxxxx</p>
+                            </div>
+                        </ul>
+                    </div>
+                </el-main>
+                <el-footer>
+                    <div style="background-color: rgba(234,241,156,0.17);">发送消息框</div>
+                </el-footer>
+            </el-container>
+        </el-container>
+        <el-footer>
+            <div style="background-color: #100101;">底部</div>
+        </el-footer>
+    </el-container>
+</div>
+</body>
+<style rel="stylesheet">
+    .test {
+        color: red
+    }
+</style>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data : {
+            count : 30,
+            msgList : [
+                {
+                    date : '2020-01-02',
+                    name : '张三',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                }
+            ]
+        },
+        methods: {
+            load : function () {
+
+            }
+        }
+
+    })
+</script>
+</html>
+
