@@ -29,26 +29,26 @@
         <el-container>
             <el-aside>
                 <div style=" height: 400px;">
-                    <el-card class="box-card">
+                    <el-card class="box-card" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
                         <div class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-                            <p v-for="h in count" class="infinite-list-item">
-                                {{h}}
-                                <el-divider></el-divider>
-                            </p>
+                            <el-card v-for="h in count"  class="box-card" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+                                <i class="el-icon-user">{{h.name}}</i>
+                            </el-card>
                         </div>
                     </el-card>
                 </div>
             </el-aside>
             <el-container>
                 <el-header>
-                    <div style="height:50px;" class="border"><h3>暂时默认群聊/昵称：{{form.name}}</h3></div>
+                    <div style="height:50px;" class="border"><h3>暂时默认群聊<el-divider direction="vertical"></el-divider>昵称：{{form.name}}</h3></div>
                 </el-header>
                 <el-main>
-                    <div style="height: 300px; width: 70%;"  v-infinite-scroll="load">
+                    <div style="height: 300px;"  v-infinite-scroll="load">
                         <ul class="infinite-list" style="overflow:auto">
-                            <div style="" v-for="msg in msgList" :class="msg.name== form.name? 'test msglistDiv':'msglistDiv'">
-                                <p>{{msg.name}}/{{msg.date}}/{{msg.address}}</p>
-                                <p>xxxxxxx</p>
+                            <div v-for="msg in msgList" :class="msg.name== form.name? 'test msglistDiv':'msglistDiv'">
+                                <div style="margin-left: 2%;color:#a79f9a">{{msg.name}}<el-divider direction="vertical"></el-divider>{{msg.date}}</div>
+                                <div style="margin-left: 2%;">{{msg.message}}</div>
+                                <el-divider></el-divider>
                             </div>
                         </ul>
                     </div>
@@ -70,7 +70,6 @@
 </body>
 <style rel="stylesheet">
     .test {
-        color: red;
         float:right;
     }
     .border {
@@ -79,7 +78,7 @@
     }
     .msglistDiv {
         clear: both; width: 50%;
-        margin-left: 10%;
+        margin-left: 2%;
         background-color: antiquewhite;
     }
 </style>
@@ -92,88 +91,30 @@
     var v = new Vue({
         el: '#app',
         data : {
-            msgShowFlag : false,
-            count : 30,
+            msgShowFlag : true,
+            count : [
+                {
+                    name : '张三'
+                },
+                {
+                    name : '张4'
+                }
+            ],
             msgList : [
                 {
                     date : '2020-01-02',
                     name : '张三',
-                    address : '成都'
+                    message : 'ces'
                 },
                 {
                     date : '2020-01-02',
                     name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
-                },
-                {
-                    date : '2020-01-02',
-                    name : '张4',
-                    address : '成都'
+                    message : '测试数据'
                 }
             ],
             textarea : '',
             form : {
-                name: ''
+                name: '张4'
             }
         },
         methods: {
@@ -204,8 +145,12 @@
         if(status == 'success') {
             alert(innerHTML);
             v.msgShowFlag = true;
+        } else if(status == 'sendMsg') {
+            var jsonStr = JSON.parse(innerHTML);
+            v.msgList.push(jsonStr);
         } else {
             alert(innerHTML);
+            v.msgShowFlag = false;
         }
     }
 

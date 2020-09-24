@@ -1,14 +1,18 @@
 package com.maowudi.lwxchat.websocket;
 
 
+import com.alibaba.dubbo.common.json.JSON;
+import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -81,16 +85,31 @@ public class MessageManage {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
+        System.out.println(new Date().toLocaleString());
         System.out.println("来自客户端的消息:" + message);
-        message = idUserName.get(session.getId()) + ": " + message;
+        ReturnMsgVo returnMsgVo = new ReturnMsgVo();
+        returnMsgVo.setSessionId(session.getId());
+        returnMsgVo.setName(idUserName.get(session.getId()));
+        returnMsgVo.setMessage(message);
         //群发消息
         for (MessageManage item : webSocketSet) {
             try {
-                item.sendMessage(message);
+                item.sendMessage(returnMsgVo.toString());
             } catch (IOException e) {
                 e.printStackTrace();
                 continue;
             }
+        }
+    }
+    @Data
+    class ReturnMsgVo implements Serializable {
+        private String sessionId;
+        private String name;
+        private String date = new Date().toLocaleString();
+        private String message;
+        
+        public String toString(){
+            return JSONObject.toJSONString(this);
         }
     }
 

@@ -24,8 +24,8 @@ function onOpenWebSocket(username,callback) {
      * 连接成功建立的回调方法
      */
     websocket.onopen = function () {
-        setMessageInnerHTML("WebSocket连接成功",callback);
         status = 'success';
+        setMessageInnerHTML("WebSocket连接成功",callback);
     }
 
     /**
@@ -33,7 +33,8 @@ function onOpenWebSocket(username,callback) {
      * @param event
      */
     websocket.onmessage = function (event) {
-        setMessageInnerHTML(event.data);
+        status='sendMsg';
+        setMessageInnerHTML(event.data,callback);
     }
 
     /**
