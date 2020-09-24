@@ -6,27 +6,47 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 <body>
-<div id="app">
-    <el-container>
+
+
+<div id="app" >
+    <!-- 登陆页 -->
+    <div v-if="!msgShowFlag">
+        <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="昵称">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">立即进入聊天室</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <!-- 聊天页 -->
+    <el-container v-if="msgShowFlag">
         <el-header>
             <div style="background-color: red;">头</div>
         </el-header>
         <el-container>
             <el-aside>
-                <div style="background-color: #ffbf00; height: 400px;">
-                    <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
-                        <p v-for="h in count" class="infinite-list-item" v-html="h"></p>
-                    </ul>
+                <div style=" height: 400px;">
+                    <el-card class="box-card">
+                        <div class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+                            <p v-for="h in count" class="infinite-list-item">
+                                {{h}}
+                                <el-divider></el-divider>
+                            </p>
+                        </div>
+                    </el-card>
                 </div>
             </el-aside>
             <el-container>
                 <el-header>
-                    <div style="background-color: #37ff00;">聊天ID</div>
+                    <div style="height:50px;" class="border"><h3>暂时默认群聊/昵称：{{form.name}}</h3></div>
                 </el-header>
                 <el-main>
-                    <div style="background-color: #47efb5;">
+                    <div style="height: 300px; width: 70%;"  v-infinite-scroll="load">
                         <ul class="infinite-list" style="overflow:auto">
-                            <div v-for="msg in msgList" :class="msg.name== '张4'? '':'test'">
+                            <div style="" v-for="msg in msgList" :class="msg.name== form.name? 'test msglistDiv':'msglistDiv'">
                                 <p>{{msg.name}}/{{msg.date}}/{{msg.address}}</p>
                                 <p>xxxxxxx</p>
                             </div>
@@ -34,29 +54,45 @@
                     </div>
                 </el-main>
                 <el-footer>
-                    <div style="background-color: rgba(234,241,156,0.17);">发送消息框</div>
+                    <div style="background-color: rgba(234,241,156,0.17);height:70px; " class="border">
+                        <el-input type="textarea" :rows="3" placeholder="请输入内容" resize="none"  v-model="textarea"></el-input>
+                    </div>
                 </el-footer>
             </el-container>
         </el-container>
         <el-footer>
-            <div style="background-color: #100101;">底部</div>
+            <div style="margin-top: 1%">
+                <el-button type="success" style="float:right;" v-on:click="sendMsg">发送</el-button>
+            </div>
         </el-footer>
     </el-container>
 </div>
 </body>
 <style rel="stylesheet">
     .test {
-        color: red
+        color: red;
+        float:right;
+    }
+    .border {
+        border-top:1px solid #000;
+        border-bottom:1px solid #000
+    }
+    .msglistDiv {
+        clear: both; width: 50%;
+        margin-left: 10%;
+        background-color: antiquewhite;
     }
 </style>
 <!-- import Vue before Element -->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="websocketUtil.js"></script>
 <script>
-    new Vue({
+    var v = new Vue({
         el: '#app',
         data : {
+            msgShowFlag : false,
             count : 30,
             msgList : [
                 {
@@ -68,16 +104,111 @@
                     date : '2020-01-02',
                     name : '张4',
                     address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
+                },
+                {
+                    date : '2020-01-02',
+                    name : '张4',
+                    address : '成都'
                 }
-            ]
+            ],
+            textarea : '',
+            form : {
+                name: ''
+            }
         },
         methods: {
             load : function () {
 
+            },
+            sendMsg : function () {
+                if(this.textarea != '') {
+                    send(this.textarea);
+                }
+                this.textarea='';
+            },
+            onSubmit : function () {
+                if(this.form.name != '') {
+                    onOpenWebSocket(this.form.name,test);
+                }
             }
         }
 
-    })
+    });
+
+    /**
+     * 回调函数
+     * @param status
+     */
+    function test(status,innerHTML){
+        console.log(status);
+        if(status == 'success') {
+            alert(innerHTML);
+            v.msgShowFlag = true;
+        } else {
+            alert(innerHTML);
+        }
+    }
+
 </script>
 </html>
 
