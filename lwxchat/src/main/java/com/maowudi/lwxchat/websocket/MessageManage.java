@@ -11,6 +11,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,6 +59,9 @@ public class MessageManage {
         //TODO 名字不能重复
         System.out.println(username);
         if(StringUtils.hasText(username)) {
+            if (idUserName.values().contains(username)) {
+                return;
+            }
             webSocketSet.add(this);     //加入set中
             addOnlineCount();           //在线数加1
             loginUsers.put(username,this);
