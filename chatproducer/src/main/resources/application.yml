@@ -7,6 +7,8 @@ spring:
   dubbo:
     appname: chatproducer
     registry: zookeeper://127.0.0.1:2181
+    protocol: dubbo
     port: 20889
     monitor: registry
     version: 1.0.0
+    threads: 500

@@ -1,7 +1,6 @@
 package com.maowudi.lwxchat.websocket;
 
 
-import com.alibaba.dubbo.common.json.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

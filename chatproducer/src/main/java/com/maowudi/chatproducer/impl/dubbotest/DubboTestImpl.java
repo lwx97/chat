@@ -9,7 +9,12 @@ import org.springframework.stereotype.Component;
 public class DubboTestImpl implements DubboTest{
 
     @Override
-    public String dubboTest(String hello) {
+    public String dubboTest(String hello){
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            return "1";
+        }
         return hello+" success!";
     }
 }
